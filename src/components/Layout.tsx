@@ -5,10 +5,8 @@ import {
   Bell,
   User as UserIcon,
   LogOut,
-  Menu,
   X,
   PlusCircle,
-  ShieldCheck,
   BarChart3,
   CheckCircle2,
 } from "lucide-react";
@@ -106,7 +104,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           >
             <LogOut className="w-5 h-5 group-hover:text-red-600" />
             {isSidebarOpen && (
-              <span className="font-heading font-bold text-sm">Sign Out</span>
+              <span className="font-heading font-bold text-blue-300 text-sm">
+                Sign Out
+              </span>
             )}
           </button>
         </div>

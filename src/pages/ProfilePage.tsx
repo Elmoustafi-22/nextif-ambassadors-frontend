@@ -10,6 +10,8 @@ import {
   CheckCircle2,
   Loader2,
   AlertCircle,
+  Lock,
+  X,
 } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -24,6 +26,10 @@ const ProfilePage = () => {
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
@@ -32,6 +38,12 @@ const ProfilePage = () => {
     phone: "",
     university: "",
     avatar: user?.avatar || "",
+  });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   useEffect(() => {
@@ -120,6 +132,50 @@ const ProfilePage = () => {
     }
   };
 
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError("");
+    setPasswordSuccess(false);
+
+    // Validation
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setPasswordError("New passwords do not match");
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      return;
+    }
+
+    setPasswordLoading(true);
+
+    try {
+      await axiosInstance.patch("/ambassador/change-password", {
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+
+      setPasswordSuccess(true);
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+
+      setTimeout(() => {
+        setShowPasswordModal(false);
+        setPasswordSuccess(false);
+      }, 2000);
+    } catch (err: any) {
+      setPasswordError(
+        err.response?.data?.message || "Failed to change password"
+      );
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
@@ -198,13 +254,14 @@ const ProfilePage = () => {
               <Shield className="text-blue-400" />
               <h3 className="font-bold">Security</h3>
             </div>
-            <p className="text-xs text-neutral-400 mb-6 leading-relaxed">
+            <p className="text-xs text-gray-200 mb-6 leading-relaxed">
               Your account is secured with end-to-end encryption. You can change
               your password at any time.
             </p>
             <Button
               variant="ghost"
-              className="w-full bg-white/10 hover:bg-white/20 text-white border-none text-xs"
+              onClick={() => setShowPasswordModal(true)}
+              className="w-full bg-white/10 hover:bg-white/20 text-white border-none text-xs cursor-pointer"
             >
               Change Password
             </Button>
@@ -285,6 +342,129 @@ const ProfilePage = () => {
           </form>
         </div>
       </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 relative animate-in fade-in zoom-in-95 duration-200">
+            <button
+              onClick={() => {
+                setShowPasswordModal(false);
+                setPasswordError("");
+                setPasswordSuccess(false);
+                setPasswordData({
+                  currentPassword: "",
+                  newPassword: "",
+                  confirmPassword: "",
+                });
+              }}
+              className="absolute top-6 right-6 p-2 hover:bg-neutral-100 rounded-full transition-colors"
+            >
+              <X size={20} className="text-neutral-500" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-blue-50 rounded-2xl">
+                <Lock className="text-blue-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold font-heading text-neutral-900">
+                  Change Password
+                </h2>
+                <p className="text-sm text-neutral-500 font-heading">
+                  Update your account password
+                </p>
+              </div>
+            </div>
+
+            {passwordError && (
+              <div className="mb-4 p-4 rounded-2xl bg-red-50 text-red-700 flex items-center gap-3 text-sm font-bold font-heading">
+                <AlertCircle size={18} />
+                {passwordError}
+              </div>
+            )}
+
+            {passwordSuccess && (
+              <div className="mb-4 p-4 rounded-2xl bg-green-50 text-green-700 flex items-center gap-3 text-sm font-bold font-heading">
+                <CheckCircle2 size={18} />
+                Password changed successfully!
+              </div>
+            )}
+
+            <form onSubmit={handlePasswordChange} className="space-y-4">
+              <Input
+                label="Current Password"
+                type="password"
+                value={passwordData.currentPassword}
+                onChange={(e) =>
+                  setPasswordData({
+                    ...passwordData,
+                    currentPassword: e.target.value,
+                  })
+                }
+                icon={<Lock size={16} className="text-neutral-400" />}
+                required
+              />
+
+              <Input
+                label="New Password"
+                type="password"
+                value={passwordData.newPassword}
+                onChange={(e) =>
+                  setPasswordData({
+                    ...passwordData,
+                    newPassword: e.target.value,
+                  })
+                }
+                icon={<Lock size={16} className="text-neutral-400" />}
+                required
+              />
+
+              <Input
+                label="Confirm New Password"
+                type="password"
+                value={passwordData.confirmPassword}
+                onChange={(e) =>
+                  setPasswordData({
+                    ...passwordData,
+                    confirmPassword: e.target.value,
+                  })
+                }
+                icon={<Lock size={16} className="text-neutral-400" />}
+                required
+              />
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setShowPasswordModal(false);
+                    setPasswordError("");
+                    setPasswordSuccess(false);
+                    setPasswordData({
+                      currentPassword: "",
+                      newPassword: "",
+                      confirmPassword: "",
+                    });
+                  }}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex-1"
+                  isLoading={passwordLoading}
+                  disabled={passwordLoading}
+                >
+                  Update Password
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
