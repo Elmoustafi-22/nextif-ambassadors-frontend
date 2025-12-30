@@ -61,7 +61,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Background Image with Text Overlay */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-blue-900 to-blue-700">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-linear-to-br from-blue-900 to-blue-700">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
