@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useAuthStore } from "../store/useAuthStore";
+import { useNotificationStore } from "../store/useNotificationStore";
+import NotificationDropdown from "./NotificationDropdown";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
@@ -23,6 +25,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     logout();
     navigate("/login");
   };
+
+  const { unreadCount, toggleDropdown, fetchNotifications } =
+    useNotificationStore();
+
+  React.useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   const links = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -114,12 +123,23 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
-        <header className="h-20 bg-royal-blue/10 backdrop-blur-md border-b border-neutral-100 px-8 flex items-center justify-between sticky top-0 z-40">
+        <header className="h-20 bg-royal-blue/10 backdrop-blur-md border-b border-neutral-100 px-8 flex items-center justify-end sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <button className="w-10 h-10 flex items-center justify-center text-neutral-400 hover:text-neutral-900 transition-colors relative">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDropdown();
+                }}
+                className="w-10 h-10 flex items-center justify-center text-neutral-400 hover:text-neutral-900 transition-colors relative"
+              >
+                <Bell size={20} />
+                {unreadCount > 0 && (
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white ring-2 ring-white"></span>
+                )}
+              </button>
+              <NotificationDropdown />
+            </div>
             <div className="h-8 w-px bg-neutral-100 mx-2"></div>
             <Link
               to="/profile"
