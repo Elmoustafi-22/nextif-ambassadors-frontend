@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Mail, Bell, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "../utils/cn";
 import { motion } from "framer-motion";
 import { useNotificationStore } from "../store/useNotificationStore";
@@ -7,6 +8,7 @@ import { useNotificationStore } from "../store/useNotificationStore";
 const InboxPage = () => {
   const { notifications, isLoading, fetchNotifications, markAsRead } =
     useNotificationStore();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<"messages" | "notifications">("messages");
 
   useEffect(() => {
@@ -115,7 +117,12 @@ const InboxPage = () => {
               {filteredMessages.map((item: any) => (
                 <div
                   key={item._id}
-                  onClick={() => !item.read && markAsRead(item._id)}
+                  onClick={() => {
+                    if (!item.read) markAsRead(item._id);
+                    if (item.referenceId && item.type === "MESSAGE") {
+                      navigate(`/tasks/${item.referenceId}`);
+                    }
+                  }}
                   className={cn(
                     "p-4 sm:p-8 hover:bg-neutral-50/50 transition-all cursor-pointer group flex items-start gap-4 sm:gap-6 border-l-4 border-transparent",
                     !item.read &&

@@ -587,6 +587,23 @@ const TaskDetailsPage = () => {
                   {task.rewardPoints || 0} XP
                 </span>
               </div>
+
+              {/* Admin Feedback */}
+              {task.submission?.adminFeedback && (
+                <div
+                  className={cn(
+                    "mt-4 p-4 rounded-2xl border text-sm leading-relaxed",
+                    task.status === "COMPLETED"
+                      ? "bg-green-50 border-green-100 text-green-800"
+                      : "bg-red-50 border-red-100 text-red-800"
+                  )}
+                >
+                  <p className="font-bold text-xs uppercase tracking-wider mb-1 opacity-70">
+                    Admin Feedback
+                  </p>
+                  <p>"{task.submission.adminFeedback}"</p>
+                </div>
+              )}
             </div>
           </div>
 

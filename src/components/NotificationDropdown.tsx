@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Info, Megaphone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useNotificationStore } from "../store/useNotificationStore";
 import { cn } from "../utils/cn";
 
@@ -14,6 +15,7 @@ const NotificationDropdown = () => {
     markAllAsRead,
   } = useNotificationStore();
 
+  const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -86,9 +88,16 @@ const NotificationDropdown = () => {
                       "p-4 hover:bg-neutral-50 transition-colors flex gap-3 cursor-pointer group relative",
                       !notification.read ? "bg-blue-50/30" : "bg-white"
                     )}
-                    onClick={() =>
-                      !notification.read && markAsRead(notification._id)
-                    }
+                    onClick={() => {
+                      if (!notification.read) markAsRead(notification._id);
+                      if (
+                        notification.referenceId &&
+                        notification.type === "MESSAGE"
+                      ) {
+                        navigate(`/tasks/${notification.referenceId}`);
+                        closeDropdown();
+                      }
+                    }}
                   >
                     <div
                       className={cn(
