@@ -38,11 +38,11 @@ const InboxPage = () => {
 
       <div className="bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm overflow-hidden min-h-[600px] flex flex-col">
         {/* Tabs */}
-        <div className="flex border-b border-neutral-50 px-8 pt-2">
+        <div className="flex border-b border-neutral-50 px-4 sm:px-8 pt-2">
           <button
             onClick={() => setTab("messages")}
             className={cn(
-              "px-8 py-5 text-sm font-bold transition-all relative flex items-center gap-2",
+              "px-4 sm:px-8 py-3 sm:py-5 text-sm font-bold transition-all relative flex items-center gap-2",
               tab === "messages"
                 ? "text-blue-600"
                 : "text-neutral-400 hover:text-neutral-900"
@@ -64,7 +64,7 @@ const InboxPage = () => {
           <button
             onClick={() => setTab("notifications")}
             className={cn(
-              "px-8 py-5 text-sm font-bold transition-all relative flex items-center gap-2",
+              "px-4 sm:px-8 py-3 sm:py-5 text-sm font-bold transition-all relative flex items-center gap-2",
               tab === "notifications"
                 ? "text-blue-600"
                 : "text-neutral-400 hover:text-neutral-900"
@@ -117,7 +117,7 @@ const InboxPage = () => {
                   key={item._id}
                   onClick={() => !item.read && markAsRead(item._id)}
                   className={cn(
-                    "p-8 hover:bg-neutral-50/50 transition-all cursor-pointer group flex items-start gap-6 border-l-4 border-transparent",
+                    "p-4 sm:p-8 hover:bg-neutral-50/50 transition-all cursor-pointer group flex items-start gap-4 sm:gap-6 border-l-4 border-transparent",
                     !item.read &&
                       "bg-blue-50/30 border-blue-600 shadow-[inset_1px_0_0_0_rgba(255,255,255,0.1)]"
                   )}

@@ -9,6 +9,7 @@ import {
   PlusCircle,
   BarChart3,
   CheckCircle2,
+  Menu,
 } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useAuthStore } from "../store/useAuthStore";
@@ -16,7 +17,9 @@ import { useNotificationStore } from "../store/useNotificationStore";
 import NotificationDropdown from "./NotificationDropdown";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(
+    window.innerWidth >= 768
+  );
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
@@ -33,6 +36,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     fetchNotifications();
   }, [fetchNotifications]);
 
+  // Close sidebar on mobile route change
+  React.useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  }, [location.pathname]);
+
   const links = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "My Tasks", href: "/tasks", icon: CheckCircle2 },
@@ -44,37 +54,60 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] flex">
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
         className={cn(
-          "bg-prussian-blue border-r border-blue-700 flex flex-col transition-all duration-300 z-50",
-          isSidebarOpen ? "w-72" : "w-20"
+          "bg-prussian-blue border-r border-blue-700 flex flex-col transition-all duration-300 z-50 fixed md:sticky top-0 h-screen",
+          isSidebarOpen
+            ? "translate-x-0 w-72"
+            : "-translate-x-full md:translate-x-0 md:w-20"
         )}
       >
         <div className="p-2 flex items-center gap-3 justify-center">
-          {isSidebarOpen && (
+          {isSidebarOpen ? (
             <span className="font-bold text-xl tracking-tight text-neutral-900">
-              <img src="/images/nextif-logo-lg.png" alt="logo" title="logo" />
+              <img
+                src="/images/nextif-logo-lg.png"
+                alt="logo"
+                title="logo"
+                className="h-10 w-auto"
+              />
             </span>
+          ) : (
+            <img
+              src="/images/nextif-logo-3.png"
+              title="mini-logo"
+              alt="mini-logo"
+              className="size-12 pt-1 hidden md:block"
+            />
           )}
+
+          {/* Mobile Close Button */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="absolute top-4 right-4 p-2 text-blue-300 md:hidden"
+          >
+            <X size={24} />
+          </button>
+
+          {/* Desktop Toggle Button */}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 cursor-pointer transition-colors text-neutral-400"
+            className="p-2 cursor-pointer transition-colors text-neutral-400 hidden md:block"
           >
-            {isSidebarOpen ? (
-              <X size={24} className="text-blue-300" />
-            ) : (
-              <img
-                src="/images/nextif-logo-3.png"
-                title="mini-logo"
-                alt="mini-logo"
-                className="size-12"
-              />
-            )}
+            {isSidebarOpen ? <X size={24} className="text-blue-300" /> : null}
           </button>
         </div>
 
-        <nav className="flex-1 px-4 mt-8 space-y-2">
+        <nav className="flex-1 px-4 mt-8 space-y-2 overflow-y-auto">
           {links.map((link) => {
             const isActive = location.pathname === link.href;
             return (
@@ -90,13 +123,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               >
                 <link.icon
                   className={cn(
-                    "w-5 h-5",
+                    "w-5 h-5 shrink-0",
                     isActive
                       ? "text-white"
                       : "text-blue-300 group-hover:text-blue-600"
                   )}
                 />
-                {isSidebarOpen && (
+                {(isSidebarOpen || window.innerWidth < 768) && (
                   <span className="font-heading font-bold text-sm">
                     {link.name}
                   </span>
@@ -111,8 +144,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             onClick={handleLogout}
             className="flex items-center gap-4 w-full px-4 py-3.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all group"
           >
-            <LogOut className="w-5 h-5 group-hover:text-red-600" />
-            {isSidebarOpen && (
+            <LogOut className="w-5 h-5 group-hover:text-red-600 shrink-0" />
+            {(isSidebarOpen || window.innerWidth < 768) && (
               <span className="font-heading font-bold text-blue-300 text-sm">
                 Sign Out
               </span>
@@ -123,8 +156,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
-        <header className="h-20 bg-royal-blue/10 backdrop-blur-md border-b border-neutral-100 px-8 flex items-center justify-end sticky top-0 z-40">
-          <div className="flex items-center gap-4">
+        <header className="h-16 md:h-20 bg-royal-blue/10 backdrop-blur-md border-b border-neutral-100 px-4 md:px-8 flex items-center justify-between sticky top-0 z-30">
+          <button
+            className="md:hidden text-neutral-500 p-2 -ml-2"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <Menu size={24} />
+          </button>
+
+          <div className="flex-1 flex justify-end items-center gap-3 md:gap-4">
             <div className="relative">
               <button
                 onClick={(e) => {
@@ -140,10 +180,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </button>
               <NotificationDropdown />
             </div>
-            <div className="h-8 w-px bg-neutral-100 mx-2"></div>
+            <div className="h-6 w-px bg-neutral-100 mx-1 md:mx-2"></div>
             <Link
               to="/profile"
-              className="flex items-center gap-3 pl-2 hover:bg-neutral-50 p-2 rounded-2xl transition-all group"
+              className="flex items-center gap-2 md:gap-3 pl-1 md:pl-2 hover:bg-neutral-50 p-1.5 md:p-2 rounded-2xl transition-all group"
             >
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-bold text-neutral-900 leading-none group-hover:text-blue-600 transition-colors">
@@ -153,7 +193,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   {user?.role}
                 </p>
               </div>
-              <div className="w-10 h-10 bg-neutral-900 rounded-xl flex items-center justify-center text-white font-bold text-xs ring-4 ring-neutral-50 group-hover:ring-blue-50 group-hover:bg-blue-600 transition-all overflow-hidden">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-neutral-900 rounded-xl flex items-center justify-center text-white font-bold text-xs ring-2 md:ring-4 ring-neutral-50 group-hover:ring-blue-50 group-hover:bg-blue-600 transition-all overflow-hidden shrink-0">
                 {user?.avatar ? (
                   <img
                     src={user.avatar}
@@ -171,7 +211,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </header>
 
-        <div className="p-8 pb-12">{children}</div>
+        <div className="p-4 md:p-8 pb-12">{children}</div>
       </main>
     </div>
   );

@@ -165,7 +165,7 @@ const AmbassadorDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Tasks */}
         <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
-          <div className="p-8 border-b border-neutral-100 flex justify-between items-center bg-neutral-50/30">
+          <div className="p-4 sm:p-8 border-b border-neutral-100 flex justify-between items-center bg-neutral-50/30">
             <h2 className="text-xl font-bold font-heading text-neutral-900 tracking-tight">
               Your Assigned Tasks
             </h2>
@@ -176,7 +176,7 @@ const AmbassadorDashboard = () => {
               Refresh
             </Link>
           </div>
-          <div className="p-8 flex-1">
+          <div className="p-4 sm:p-8 flex-1">
             <div className="space-y-4">
               {loading ? (
                 Array.from({ length: 3 }).map((_, i) => (
@@ -199,9 +199,9 @@ const AmbassadorDashboard = () => {
                   <Link
                     key={task._id}
                     to={`/tasks/${task._id}`}
-                    className="flex items-center justify-between p-6 rounded-3xl hover:bg-neutral-50 transition-all border border-neutral-50 group hover:border-blue-100"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 rounded-3xl hover:bg-neutral-50 transition-all border border-neutral-50 group hover:border-blue-100 gap-4"
                   >
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-5 w-full sm:w-auto">
                       <div
                         className={cn(
                           "w-14 h-14 rounded-2xl flex items-center justify-center transition-all relative",
@@ -243,7 +243,7 @@ const AmbassadorDashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
                       <span
                         className={cn(
                           "px-4 py-1.5 rounded-full text-[10px] font-black font-heading uppercase tracking-widest border",
@@ -269,12 +269,12 @@ const AmbassadorDashboard = () => {
 
         {/* Notifications */}
         <div className="bg-white rounded-[2.5rem] border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
-          <div className="p-8 border-b border-neutral-100 bg-neutral-50/30">
+          <div className="p-4 sm:p-8 border-b border-neutral-100 bg-neutral-50/30">
             <h2 className="text-xl font-bold font-heading text-neutral-900 tracking-tight">
               Recent Alerts
             </h2>
           </div>
-          <div className="p-8 flex-1">
+          <div className="p-4 sm:p-8 flex-1">
             <div className="space-y-8">
               {loading ? (
                 Array.from({ length: 3 }).map((_, i) => (
