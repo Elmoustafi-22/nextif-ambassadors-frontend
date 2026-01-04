@@ -12,6 +12,9 @@ import {
   AlertCircle,
   Lock,
   X,
+  Instagram,
+  Twitter,
+  Linkedin,
 } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -35,9 +38,13 @@ const ProfilePage = () => {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     email: user?.email || "",
-    phone: "",
-    university: "",
-    avatar: user?.avatar || "",
+    phone: user?.profile?.phone || "",
+    university: user?.profile?.university || "",
+    instagram: user?.profile?.instagram || "",
+    twitter: user?.profile?.twitter || "",
+    linkedin: user?.profile?.linkedin || "",
+    tiktok: user?.profile?.tiktok || "",
+    avatar: user?.avatar || user?.profile?.avatar || "",
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -53,7 +60,13 @@ const ProfilePage = () => {
         firstName: user.firstName || "",
         lastName: user.lastName || "",
         email: user.email || "",
-        avatar: user.avatar || "",
+        phone: user.profile?.phone || "",
+        university: user.profile?.university || "",
+        instagram: user.profile?.instagram || "",
+        twitter: user.profile?.twitter || "",
+        linkedin: user.profile?.linkedin || "",
+        tiktok: user.profile?.tiktok || "",
+        avatar: user.avatar || user.profile?.avatar || "",
       }));
     }
   }, [user]);
@@ -115,13 +128,14 @@ const ProfilePage = () => {
     try {
       const response = await axiosInstance.patch("/ambassador/me", {
         phone: formData.phone,
-        university: formData.university,
         avatar: formData.avatar,
+        instagram: formData.instagram,
+        twitter: formData.twitter,
+        linkedin: formData.linkedin,
+        tiktok: formData.tiktok,
       });
 
-      updateUser({
-        avatar: response.data.profile?.avatar,
-      });
+      updateUser(response.data);
 
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
@@ -278,17 +292,13 @@ const ProfilePage = () => {
               <Input
                 label="First Name"
                 value={formData.firstName}
-                onChange={(e) =>
-                  setFormData({ ...formData, firstName: e.target.value })
-                }
+                disabled
                 icon={<User size={16} className="text-neutral-400" />}
               />
               <Input
                 label="Last Name"
                 value={formData.lastName}
-                onChange={(e) =>
-                  setFormData({ ...formData, lastName: e.target.value })
-                }
+                disabled
                 icon={<User size={16} className="text-neutral-400" />}
               />
             </div>
@@ -315,12 +325,51 @@ const ProfilePage = () => {
               />
               <Input
                 label="University"
-                placeholder="University of Lagos"
+                placeholder="University Name"
                 value={formData.university}
-                onChange={(e) =>
-                  setFormData({ ...formData, university: e.target.value })
-                }
+                disabled
                 icon={<MapPin size={16} className="text-neutral-400" />}
+              />
+            </div>
+
+            <div className="h-px bg-neutral-50"></div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Input
+                label="Instagram Handle"
+                placeholder="@username"
+                value={formData.instagram}
+                onChange={(e) =>
+                  setFormData({ ...formData, instagram: e.target.value })
+                }
+                icon={<Instagram size={16} className="text-neutral-400" />}
+              />
+              <Input
+                label="Twitter Handle"
+                placeholder="@username"
+                value={formData.twitter}
+                onChange={(e) =>
+                  setFormData({ ...formData, twitter: e.target.value })
+                }
+                icon={<Twitter size={16} className="text-neutral-400" />}
+              />
+              <Input
+                label="LinkedIn Profile"
+                placeholder="linkedin.com/in/username"
+                value={formData.linkedin}
+                onChange={(e) =>
+                  setFormData({ ...formData, linkedin: e.target.value })
+                }
+                icon={<Linkedin size={16} className="text-neutral-400" />}
+              />
+              <Input
+                label="TikTok Handle"
+                placeholder="@username"
+                value={formData.tiktok}
+                onChange={(e) =>
+                  setFormData({ ...formData, tiktok: e.target.value })
+                }
+                icon={<User size={16} className="text-neutral-400" />}
               />
             </div>
 

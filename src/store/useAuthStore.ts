@@ -10,6 +10,15 @@ interface User {
   title?: string;
   avatar?: string;
   isFirstLogin?: boolean;
+  profile?: {
+    phone?: string;
+    avatar?: string;
+    university?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    tiktok?: string;
+  };
 }
 
 interface AuthState {
