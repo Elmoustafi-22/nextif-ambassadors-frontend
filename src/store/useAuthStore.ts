@@ -17,7 +17,7 @@ interface User {
     instagram?: string;
     twitter?: string;
     linkedin?: string;
-    tiktok?: string;
+    facebook?: string;
   };
 }
 

@@ -15,6 +15,7 @@ import {
   Instagram,
   Twitter,
   Linkedin,
+  Facebook,
 } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -43,7 +44,7 @@ const ProfilePage = () => {
     instagram: user?.profile?.instagram || "",
     twitter: user?.profile?.twitter || "",
     linkedin: user?.profile?.linkedin || "",
-    tiktok: user?.profile?.tiktok || "",
+    facebook: user?.profile?.facebook || "",
     avatar: user?.avatar || user?.profile?.avatar || "",
   });
 
@@ -65,7 +66,7 @@ const ProfilePage = () => {
         instagram: user.profile?.instagram || "",
         twitter: user.profile?.twitter || "",
         linkedin: user.profile?.linkedin || "",
-        tiktok: user.profile?.tiktok || "",
+        facebook: user.profile?.facebook || "",
         avatar: user.avatar || user.profile?.avatar || "",
       }));
     }
@@ -132,7 +133,7 @@ const ProfilePage = () => {
         instagram: formData.instagram,
         twitter: formData.twitter,
         linkedin: formData.linkedin,
-        tiktok: formData.tiktok,
+        facebook: formData.facebook,
       });
 
       updateUser(response.data);
@@ -363,13 +364,13 @@ const ProfilePage = () => {
                 icon={<Linkedin size={16} className="text-neutral-400" />}
               />
               <Input
-                label="TikTok Handle"
-                placeholder="@username"
-                value={formData.tiktok}
+                label="Facebook Handle"
+                placeholder="facebook.com/username"
+                value={formData.facebook}
                 onChange={(e) =>
-                  setFormData({ ...formData, tiktok: e.target.value })
+                  setFormData({ ...formData, facebook: e.target.value })
                 }
-                icon={<User size={16} className="text-neutral-400" />}
+                icon={<Facebook size={16} className="text-neutral-400" />}
               />
             </div>
 
