@@ -237,10 +237,14 @@ const TaskDetailsPage = () => {
                       "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
                       task.verificationType === "AUTO"
                         ? "bg-green-100 text-green-700"
+                        : task.status === "REDO"
+                        ? "bg-amber-100 text-amber-700"
                         : "bg-blue-100 text-blue-700"
                     )}
                   >
-                    {task.verificationType} Verification
+                    {task.status === "REDO"
+                      ? "Redo Required"
+                      : task.verificationType + " Verification"}
                   </span>
                   {task.isBonus && (
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-700">
@@ -350,7 +354,10 @@ const TaskDetailsPage = () => {
           </div>
 
           {!isSuccess &&
-          (!task.status || task.status === "PENDING" || isEditing) ? (
+          (!task.status ||
+            task.status === "PENDING" ||
+            task.status === "REDO" ||
+            isEditing) ? (
             <div className="bg-white rounded-3xl border border-neutral-100 p-8 shadow-sm">
               <h2 className="text-lg font-bold mb-6">Submit Your Work</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -575,10 +582,14 @@ const TaskDetailsPage = () => {
                     "font-bold uppercase",
                     task.status === "COMPLETED"
                       ? "text-green-600"
+                      : task.status === "REDO"
+                      ? "text-amber-600"
                       : "text-amber-600"
                   )}
                 >
-                  {task.status || "Pending"}
+                  {task.status === "REDO"
+                    ? "Redo Required"
+                    : task.status || "Pending"}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -593,15 +604,21 @@ const TaskDetailsPage = () => {
                 <div
                   className={cn(
                     "mt-4 p-4 rounded-2xl border text-sm leading-relaxed",
-                    task.status === "COMPLETED"
+                    task.status === "REDO"
+                      ? "bg-amber-50 border-amber-200 text-amber-900 border-l-4 border-l-amber-500"
+                      : task.status === "COMPLETED"
                       ? "bg-green-50 border-green-100 text-green-800"
                       : "bg-red-50 border-red-100 text-red-800"
                   )}
                 >
                   <p className="font-bold text-xs uppercase tracking-wider mb-1 opacity-70">
-                    Admin Feedback
+                    {task.status === "REDO"
+                      ? "Action Required: Admin Feedback"
+                      : "Admin Feedback"}
                   </p>
-                  <p>"{task.submission.adminFeedback}"</p>
+                  <p className="font-medium italic">
+                    "{task.submission.adminFeedback}"
+                  </p>
                 </div>
               )}
             </div>

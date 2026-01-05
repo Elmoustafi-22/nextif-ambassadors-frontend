@@ -196,6 +196,8 @@ const TasksPage = () => {
                     "w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-all group-hover:scale-110 shadow-sm",
                     task.status === "COMPLETED"
                       ? "bg-green-50 text-green-600"
+                      : task.status === "REDO"
+                      ? "bg-amber-50 text-amber-600"
                       : task.isBonus
                       ? "bg-purple-50 text-purple-600"
                       : "bg-blue-50 text-blue-600",
@@ -239,10 +241,14 @@ const TasksPage = () => {
                         "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
                         task.status === "COMPLETED"
                           ? "bg-green-50 border-green-100 text-green-700"
+                          : task.status === "REDO"
+                          ? "bg-amber-50 border-amber-100 text-amber-700 underline decoration-amber-300"
                           : "bg-amber-50 border-amber-100 text-amber-700"
                       )}
                     >
-                      {task.status || "Pending"}
+                      {task.status === "REDO"
+                        ? "Redo Required"
+                        : task.status || "Pending"}
                     </span>
                   </div>
                 </div>

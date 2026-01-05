@@ -13,7 +13,16 @@ The Ambassador Portal for the NextIF Ambassador Platform. This application is de
 - **Icons:** Lucide React
 - **Animations:** Framer Motion
 
-## Prerequisites
+## Core Features
+
+- **Personalised Dashboard:** Track XP progress, recent activities, and pending tasks.
+- **Enhanced Task View:**
+  - View all assigned tasks including Weekly, Monthly, and **ADHOC** assignments.
+  - **Actionable Feedback:** Direct visibility into admin remarks for redo requests.
+  - **Dynamic Deadlines:** Real-time countdowns that adapt to individual redo deadlines.
+- **Secure Submissions:** Structured responses with support for file attachments and links.
+- **Profile Management:** Update personal information and account security.
+- **Communication:** Submit complaints and inquiries directly to the admin team.
 
 - Node.js (v18 or higher recommended)
 - npm
