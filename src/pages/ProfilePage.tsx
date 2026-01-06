@@ -40,7 +40,8 @@ const ProfilePage = () => {
     lastName: user?.lastName || "",
     email: user?.email || "",
     phone: user?.profile?.phone || "",
-    university: user?.profile?.university || "",
+    institution: user?.profile?.institution || "",
+    courseOfStudy: user?.profile?.courseOfStudy || "",
     instagram: user?.profile?.instagram || "",
     twitter: user?.profile?.twitter || "",
     linkedin: user?.profile?.linkedin || "",
@@ -62,7 +63,8 @@ const ProfilePage = () => {
         lastName: user.lastName || "",
         email: user.email || "",
         phone: user.profile?.phone || "",
-        university: user.profile?.university || "",
+        institution: user.profile?.institution || "",
+        courseOfStudy: user.profile?.courseOfStudy || "",
         instagram: user.profile?.instagram || "",
         twitter: user.profile?.twitter || "",
         linkedin: user.profile?.linkedin || "",
@@ -325,11 +327,18 @@ const ProfilePage = () => {
                 icon={<Phone size={16} className="text-neutral-400" />}
               />
               <Input
-                label="University"
-                placeholder="University Name"
-                value={formData.university}
+                label="Institution"
+                placeholder="Institution Name"
+                value={formData.institution}
                 disabled
                 icon={<MapPin size={16} className="text-neutral-400" />}
+              />
+              <Input
+                label="Course of Study"
+                placeholder="Course of Study"
+                value={formData.courseOfStudy}
+                disabled
+                icon={<User size={16} className="text-neutral-400" />}
               />
             </div>
 
