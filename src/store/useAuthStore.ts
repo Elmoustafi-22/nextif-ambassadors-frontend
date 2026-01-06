@@ -13,7 +13,8 @@ interface User {
   profile?: {
     phone?: string;
     avatar?: string;
-    university?: string;
+    institution?: string;
+    courseOfStudy?: string;
     instagram?: string;
     twitter?: string;
     linkedin?: string;
