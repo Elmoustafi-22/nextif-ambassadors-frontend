@@ -598,6 +598,14 @@ const TaskDetailsPage = () => {
                   {task.rewardPoints || 0} XP
                 </span>
               </div>
+              {task.createdBy && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-neutral-500">Created By</span>
+                  <span className="font-bold text-neutral-900">
+                    {task.createdBy.firstName} {task.createdBy.lastName}
+                  </span>
+                </div>
+              )}
 
               {/* Admin Feedback */}
               {task.submission?.adminFeedback && (
