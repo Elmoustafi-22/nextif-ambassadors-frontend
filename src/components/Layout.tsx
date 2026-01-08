@@ -21,9 +21,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(
     window.innerWidth >= 768
   );
+  const [isHovered, setIsHovered] = React.useState(false);
+  const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+
+  // effectiveOpen is true if explicitly open OR currently hovered
+  const effectiveOpen = isSidebarOpen || isHovered;
 
   const handleLogout = () => {
     logout();
@@ -41,8 +46,23 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   React.useEffect(() => {
     if (window.innerWidth < 768) {
       setIsSidebarOpen(false);
+      setIsHovered(false);
     }
   }, [location.pathname]);
+
+  const handleMouseEnter = () => {
+    if (!isSidebarOpen && !isHovered) {
+      hoverTimeoutRef.current = setTimeout(() => {
+        setIsHovered(true);
+      }, 300);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+  };
 
   const links = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -57,7 +77,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-[#FDFDFD] flex">
       {/* Mobile Backdrop */}
-      {isSidebarOpen && (
+      {effectiveOpen && window.innerWidth < 768 && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
@@ -68,13 +88,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <aside
         className={cn(
           "bg-prussian-blue border-r border-blue-700 flex flex-col transition-all duration-300 z-50 fixed md:sticky top-0 h-screen",
-          isSidebarOpen
+          effectiveOpen
             ? "translate-x-0 w-72"
             : "-translate-x-full md:translate-x-0 md:w-20"
         )}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className="p-2 flex items-center gap-3 justify-center">
-          {isSidebarOpen ? (
+          {effectiveOpen ? (
             <span className="font-bold text-xl tracking-tight text-neutral-900">
               <img
                 src="/images/nextif-logo-lg.png"
@@ -84,12 +106,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               />
             </span>
           ) : (
-            <img
-              src="/images/nextif-logo-3.png"
-              title="mini-logo"
-              alt="mini-logo"
-              className="size-12 pt-1 hidden md:block"
-            />
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-0 border-0 bg-transparent cursor-pointer focus:outline-none w-full flex justify-center"
+            >
+              <img
+                src="/images/nextif-logo-3.png"
+                title="mini-logo"
+                alt="mini-logo"
+                className="size-12 pt-1 hidden md:block"
+              />
+            </button>
           )}
 
           {/* Mobile Close Button */}
@@ -100,12 +127,24 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <X size={24} />
           </button>
 
-          {/* Desktop Toggle Button */}
+          {/* Desktop Toggle Button - Only visible when open OR effectively open due to hover */}
+          {/* We want to show the close button if it's effectively open so user can pin/unpin or close it */}
           <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 cursor-pointer transition-colors text-neutral-400 hidden md:block"
+            onClick={() => {
+              if (isSidebarOpen) {
+                // If it's pinned open, unpin it
+                setIsSidebarOpen(false);
+                // And remove hover state so it collapses immediately
+                setIsHovered(false);
+              } else {
+                // If it's closed (but maybe hovered), pin it open
+                setIsSidebarOpen(true);
+                setIsHovered(false);
+              }
+            }}
+            className="p-2 cursor-pointer transition-colors text-neutral-400 hidden md:block absolute right-2 top-3"
           >
-            {isSidebarOpen ? <X size={24} className="text-blue-300" /> : null}
+            {effectiveOpen ? <X size={24} className="text-blue-300" /> : null}
           </button>
         </div>
 
@@ -131,7 +170,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                       : "text-blue-300 group-hover:text-blue-600"
                   )}
                 />
-                {(isSidebarOpen || window.innerWidth < 768) && (
+                {(effectiveOpen || window.innerWidth < 768) && (
                   <span className="font-heading font-bold text-sm">
                     {link.name}
                   </span>
@@ -147,7 +186,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             className="flex items-center gap-4 w-full px-4 py-3.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all group"
           >
             <LogOut className="w-5 h-5 group-hover:text-red-600 shrink-0" />
-            {(isSidebarOpen || window.innerWidth < 768) && (
+            {(effectiveOpen || window.innerWidth < 768) && (
               <span className="font-heading font-bold text-blue-300 text-sm">
                 Sign Out
               </span>
