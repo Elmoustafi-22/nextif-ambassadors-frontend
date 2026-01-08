@@ -20,6 +20,9 @@ The Ambassador Portal for the NextIF Ambassador Platform. This application is de
   - View all assigned tasks including Weekly, Monthly, and **ADHOC** assignments.
   - **Actionable Feedback:** Direct visibility into admin remarks for redo requests.
   - **Dynamic Deadlines:** Real-time countdowns that adapt to individual redo deadlines.
+- **Events & Attendance:**
+  - View upcoming events with join links (Zoom/Meet, etc.).
+  - Track personal attendance history for workshops and webinars.
 - **Secure Submissions:** Structured responses with support for file attachments and links.
 - **Profile Management:** Update personal information and account security.
 - **Communication:** Submit complaints and inquiries directly to the admin team.

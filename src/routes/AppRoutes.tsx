@@ -10,6 +10,7 @@ import InboxPage from "../pages/InboxPage";
 import ComplaintsPage from "../pages/ComplaintsPage";
 import ReportsPage from "../pages/ReportsPage";
 import ProfilePage from "../pages/ProfilePage";
+import EventsPage from "../pages/EventsPage";
 import Layout from "../components/Layout";
 
 // Placeholder components
@@ -39,6 +40,7 @@ const AppRoutes = () => {
           <Route path="/complaints" element={<ComplaintsPage />} />
           <Route path="/reports" element={<ReportsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/events" element={<EventsPage />} />
           {/* Future Ambassador routes: /tasks */}
         </Route>
       </Route>

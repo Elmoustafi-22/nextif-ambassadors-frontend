@@ -10,6 +10,7 @@ import {
   BarChart3,
   CheckCircle2,
   Menu,
+  Calendar,
 } from "lucide-react";
 import { cn } from "../utils/cn";
 import { useAuthStore } from "../store/useAuthStore";
@@ -49,6 +50,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { name: "Support & Help", href: "/complaints", icon: PlusCircle },
     { name: "Inbox", href: "/inbox", icon: Bell },
     { name: "Reports", href: "/reports", icon: BarChart3 },
+    { name: "Events", href: "/events", icon: Calendar },
     { name: "Profile", href: "/profile", icon: UserIcon },
   ];
 
