@@ -430,7 +430,7 @@ const TaskDetailsPage = () => {
                     {task.requirements?.includes("LINK") && (
                       <div className="space-y-3">
                         <label className="text-sm font-bold text-neutral-900">
-                          Submission Links
+                          Submission Links (Google Drive, Social Media, etc.)
                         </label>
                         {links.map((link, idx) => (
                           <input
@@ -466,6 +466,7 @@ const TaskDetailsPage = () => {
                             className="hidden"
                             id="file-upload"
                             onChange={handleFileChange}
+                            accept=".pdf,.png,.jpg,.jpeg"
                           />
                           <label
                             htmlFor="file-upload"
@@ -482,7 +483,7 @@ const TaskDetailsPage = () => {
                                 {file ? file.name : "Upload Proof"}
                               </p>
                               <p className="text-[10px] text-neutral-400">
-                                PDF, PNG, JPG (Max 10MB)
+                                PDF, PNG, JPG (Max 5MB)
                               </p>
                             </div>
                           </label>
