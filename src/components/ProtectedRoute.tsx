@@ -17,6 +17,7 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   // if (allowedRoles && user && !allowedRoles.includes(user.role)) {
   //   return <Navigate to="/unauthorized" replace />;
   // }
+  void allowedRoles;
 
   // Handle first login password reset requirement
   if (user?.isFirstLogin && location.pathname !== "/reset-password") {
