@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import api from "../api/axiosInstance";
-import Layout from "../components/Layout";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -51,7 +50,7 @@ const EventsPage = () => {
   }, []);
 
   return (
-    <Layout>
+    <>
       <div className="max-w-5xl mx-auto space-y-8">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">
@@ -219,7 +218,7 @@ const EventsPage = () => {
           </>
         )}
       </div>
-    </Layout>
+    </>
   );
 };
 
