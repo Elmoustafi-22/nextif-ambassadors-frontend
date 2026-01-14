@@ -110,7 +110,7 @@ const TaskDetailsPage = () => {
     formData.append("responses", JSON.stringify(formattedResponses));
 
     if (file) {
-      formData.append("file", file);
+      formData.append("proofFiles", file);
     }
 
     try {
@@ -466,7 +466,7 @@ const TaskDetailsPage = () => {
                             className="hidden"
                             id="file-upload"
                             onChange={handleFileChange}
-                            accept=".pdf,.png,.jpg,.jpeg"
+                            accept=".pdf,.png,.jpg,.jpeg,.mp4,.mov"
                           />
                           <label
                             htmlFor="file-upload"
@@ -483,7 +483,7 @@ const TaskDetailsPage = () => {
                                 {file ? file.name : "Upload Proof"}
                               </p>
                               <p className="text-[10px] text-neutral-400">
-                                PDF, PNG, JPG (Max 5MB)
+                                PDF, Images, Video (Max 50MB)
                               </p>
                             </div>
                           </label>
