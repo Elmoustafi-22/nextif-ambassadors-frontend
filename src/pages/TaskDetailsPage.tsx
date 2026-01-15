@@ -85,7 +85,19 @@ const TaskDetailsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!submissionMsg && !file) return;
+
+    // Check if there's any valid submission content
+    const hasValidLinks = links.some((l) => l.trim() !== "");
+    const hasValidResponses = Object.values(responses).some(
+      (r) => r.trim() !== ""
+    );
+
+    if (!submissionMsg && !file && !hasValidLinks && !hasValidResponses) {
+      setError(
+        "Please provide at least one form of submission (response, link, text, or file)"
+      );
+      return;
+    }
 
     setSubmitting(true);
     setError("");
@@ -433,25 +445,43 @@ const TaskDetailsPage = () => {
                           Submission Links (Google Drive, Social Media, etc.)
                         </label>
                         {links.map((link, idx) => (
-                          <input
-                            key={idx}
-                            type="url"
-                            className="w-full bg-neutral-50 border border-neutral-100 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                            placeholder="https://..."
-                            value={link}
-                            onChange={(e) => {
-                              const newLinks = [...links];
-                              newLinks[idx] = e.target.value;
-                              if (
-                                idx === links.length - 1 &&
-                                e.target.value !== ""
-                              ) {
-                                newLinks.push("");
-                              }
-                              setLinks(newLinks);
-                            }}
-                          />
+                          <div key={idx} className="flex gap-2">
+                            <input
+                              type="url"
+                              className="flex-1 bg-neutral-50 border border-neutral-100 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                              placeholder="https://..."
+                              value={link}
+                              onChange={(e) => {
+                                const newLinks = [...links];
+                                newLinks[idx] = e.target.value;
+                                setLinks(newLinks);
+                              }}
+                            />
+                            {links.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newLinks = links.filter(
+                                    (_, i) => i !== idx
+                                  );
+                                  setLinks(
+                                    newLinks.length > 0 ? newLinks : [""]
+                                  );
+                                }}
+                                className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors text-sm font-medium"
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </div>
                         ))}
+                        <button
+                          type="button"
+                          onClick={() => setLinks([...links, ""])}
+                          className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 mt-2"
+                        >
+                          + Add More Links
+                        </button>
                       </div>
                     )}
 
