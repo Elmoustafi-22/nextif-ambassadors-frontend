@@ -163,6 +163,15 @@ const LoginPage = () => {
                       }
                       icon={<Lock className="w-4 h-4 text-neutral-400" />}
                     />
+                    <div className="flex justify-end mt-1.5">
+                      <button
+                        type="button"
+                        onClick={() => navigate("/forgot-password")}
+                        className="text-xs text-blue-600 hover:text-blue-500 transition-colors font-medium mr-1"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
